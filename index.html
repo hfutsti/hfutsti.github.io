@@ -1,654 +1,203 @@
-<!DOCTYPE html> <html lang="zh-CN"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>时空智能实验室 | Spatio-Temporal Intelligence Lab</title> <style> /* ==================== 全局样式 ==================== */ :root { --primary-color: #1e40af; --secondary-color: #0f172a; --accent-color: #3b82f6; --text-dark: #1e293b; --text-light: #64748b; --bg-light: #f1f5f9; --white: #ffffff; --gradient: linear-gradient(135deg, #1e40af 0%, #0f172a 100%); }
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
-        line-height: 1.6;
-        color: var(--text-dark);
-        background: var(--bg-light);
-    }
-
-    a {
-        text-decoration: none;
-        color: inherit;
-        transition: 0.3s;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 30px;
-    }
-
-    .section {
-        padding: 80px 0;
-    }
-
-    .section-title {
-        text-align: center;
-        font-size: 2.5rem;
-        margin-bottom: 15px;
-        color: var(--secondary-color);
-        font-weight: 700;
-    }
-
-    .section-subtitle {
-        text-align: center;
-        color: var(--text-light);
-        margin-bottom: 60px;
-        font-size: 1.1rem;
-    }
-
-    /* ==================== 导航栏 ==================== */
-    header {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 2px 30px rgba(0,0,0,0.1);
-        z-index: 1000;
-    }
-
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px 0;
-    }
-
-    .logo {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: var(--primary-color);
-    }
-
-    .logo span {
-        color: var(--secondary-color);
-    }
-
-    .nav-links {
-        display: flex;
-        gap: 35px;
-    }
-
-    .nav-links a {
-        color: var(--text-dark);
-        font-weight: 500;
-        position: relative;
-    }
-
-    .nav-links a:hover {
-        color: var(--primary-color);
-    }
-
-    .nav-links a::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 0;
-        width: 0;
-        height: 3px;
-        background: var(--primary-color);
-        transition: 0.3s;
-    }
-
-    .nav-links a:hover::after {
-        width: 100%;
-    }
-
-    /* ==================== Hero 区域 ==================== */
-    .hero {
-        height: 80vh;
-        background: var(--gradient);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        color: var(--white);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url('images/lab-bg.jpg') center/cover;
-        opacity: 0.15;
-    }
-
-    .hero-content {
-        position: relative;
-        z-index: 1;
-        max-width: 900px;
-        padding: 0 30px;
-    }
-
-    .hero h1 {
-        font-size: 3.5rem;
-        margin-bottom: 20px;
-        text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
-        letter-spacing: 3px;
-    }
-
-    .hero h2 {
-        font-size: 1.5rem;
-        margin-bottom: 25px;
-        font-weight: 400;
-        opacity: 0.95;
-    }
-
-    .hero p {
-        font-size: 1.2rem;
-        margin-bottom: 35px;
-        opacity: 0.9;
-        line-height: 1.8;
-    }
-
-    .hero-btn {
-        background: var(--white);
-        color: var(--primary-color);
-        padding: 15px 45px;
-        border-radius: 50px;
-        font-weight: bold;
-        font-size: 1.1rem;
-        display: inline-block;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    }
-
-    .hero-btn:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-    }
-
-    /* ==================== 教师团队 ==================== */
-    .teachers {
-        background: var(--white);
-    }
-
-    .teacher-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 80px;
-    }
-
-    .teacher-card {
-        background: var(--bg-light);
-        border-radius: 25px;
-        overflow: hidden;
-        box-shadow: 0 10px 50px rgba(0,0,0,0.1);
-        transition: 0.4s;
-    }
-
-    .teacher-card:hover {
-        box-shadow: 0 20px 70px rgba(0,0,0,0.15);
-    }
-
-    /* 老师头部区域 - 修改布局 */
-    .teacher-header {
-        background: var(--gradient);
-        padding: 50px;
-        display: grid;
-        /* 左侧固定宽度放照片和信息，右侧自适应放简介 */
-        grid-template-columns: 320px 1fr; 
-        gap: 40px;
-        align-items: start;
-    }
-
-    /* 左侧列：照片 + 个人信息 */
-    .teacher-left-col {
-        display: flex;
-        flex-direction: column;
-        gap: 25px;
-    }
-
-    .teacher-photo {
-        width: 100%;
-        height: 380px;
-        object-fit: cover;
-        border-radius: 20px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        border: 5px solid rgba(255,255,255,0.2);
-    }
-
-    /* 个人信息表格样式调整 */
-    .info-grid {
-        display: grid;
-        grid-template-columns: 1fr; /* 单列显示 */
-        gap: 15px;
-        background: rgba(255,255,255,0.1);
-        padding: 20px;
-        border-radius: 15px;
-        backdrop-filter: blur(10px);
-    }
-
-    .info-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        padding-bottom: 8px;
-    }
-
-    .info-item:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-
-    .info-label {
-        font-size: 0.85rem;
-        color: rgba(255,255,255,0.7);
-        white-space: nowrap;
-        margin-right: 10px;
-    }
-
-    .info-value {
-        font-size: 0.95rem;
-        color: var(--white);
-        font-weight: 500;
-        text-align: right;
-        word-break: break-all;
-    }
-
-    .info-value a {
-        color: var(--accent-color);
-    }
-
-    .info-value a:hover {
-        text-decoration: underline;
-    }
-
-    /* 右侧列：姓名 + 简介 */
-    .teacher-right-col {
-        color: var(--white);
-    }
-
-    .teacher-name {
-        font-size: 2.5rem;
-        margin-bottom: 30px;
-        font-weight: 700;
-        border-bottom: 2px solid rgba(255,255,255,0.2);
-        padding-bottom: 15px;
-        display: inline-block;
-    }
-
-    /* 简介区域样式调整 (在 Header 内) */
-    .header-bio {
-        background: rgba(255,255,255,0.05);
-        padding: 25px;
-        border-radius: 15px;
-        margin-top: 10px;
-    }
-
-    .header-bio h4 {
-        font-size: 1.4rem;
-        margin-bottom: 15px;
-        color: var(--accent-color);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .bio-text {
-        color: rgba(255,255,255,0.9);
-        line-height: 1.8;
-        font-size: 1rem;
-        text-align: justify;
-    }
-
-    .bio-text p {
-        margin-bottom: 15px;
-    }
-
-    .bio-text p:last-child {
-        margin-bottom: 0;
-    }
-
-    /* 老师内容区 (研究方向 + 论文) */
-    .teacher-body {
-        padding: 50px;
-        background: var(--white);
-    }
-
-    /* 研究方向 */
-    .research-section {
-        margin-bottom: 50px;
-    }
-
-    .section-header {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 35px;
-        padding-bottom: 15px;
-        border-bottom: 3px solid var(--primary-color);
-    }
-
-    .section-header h4 {
-        font-size: 1.6rem;
-        color: var(--secondary-color);
-        font-weight: 700;
-    }
-
-    .section-icon {
-        font-size: 1.8rem;
-    }
-
-    .direction-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 35px;
-    }
-
-    .direction-card {
-        background: var(--bg-light);
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 5px 25px rgba(0,0,0,0.05);
-        transition: 0.3s;
-        display: grid;
-        grid-template-columns: 350px 1fr;
-    }
-
-    .direction-card:hover {
-        transform: translateX(10px);
-        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    }
-
-    .direction-img {
-        width: 350px;
-        height: 220px;
-        object-fit: cover;
-        background: #ddd;
-    }
-
-    .direction-content {
-        padding: 30px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .direction-number {
-        display: inline-block;
-        background: var(--gradient);
-        color: var(--white);
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        border-radius: 50%;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    .direction-title {
-        font-size: 1.4rem;
-        color: var(--secondary-color);
-        margin-bottom: 15px;
-        font-weight: 600;
-    }
-
-    .direction-desc {
-        color: var(--text-light);
-        font-size: 1rem;
-        line-height: 1.8;
-        text-align: justify;
-    }
-
-    .direction-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 20px;
-        padding-top: 15px;
-        border-top: 1px solid #e2e8f0;
-    }
-
-    .tag {
-        background: var(--white);
-        color: var(--primary-color);
-        padding: 5px 12px;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        font-weight: 500;
-        border: 1px solid #e2e8f0;
-    }
-
-    /* 代表论文 */
-    .papers-section {
-        background: var(--bg-light);
-        padding: 40px;
-        border-radius: 20px;
-        box-shadow: 0 5px 25px rgba(0,0,0,0.05);
-    }
-
-    .paper-list {
-        list-style: none;
-        display: grid;
-        gap: 15px;
-    }
-
-    .paper-item {
-        padding: 18px 25px;
-        background: var(--white);
-        border-radius: 12px;
-        display: flex;
-        align-items: flex-start;
-        gap: 15px;
-        transition: 0.3s;
-    }
-
-    .paper-item:hover {
-        background: #f8fafc;
-        transform: translateX(5px);
-    }
-
-    .paper-icon {
-        font-size: 1.3rem;
-        flex-shrink: 0;
-    }
-
-    .paper-content {
-        flex: 1;
-    }
-
-    .paper-title {
-        color: var(--text-dark);
-        font-size: 1rem;
-        font-weight: 500;
-        margin-bottom: 8px;
-        line-height: 1.5;
-    }
-
-    .paper-title a {
-        color: var(--primary-color);
-    }
-
-    .paper-title a:hover {
-        text-decoration: underline;
-    }
-
-    .paper-meta {
-        font-size: 0.85rem;
-        color: var(--text-light);
-    }
-
-    .paper-year {
-        background: var(--primary-color);
-        color: var(--white);
-        padding: 3px 10px;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        margin-left: 10px;
-        font-weight: 600;
-    }
-
-    /* ==================== 联系我们 ==================== */
-    .contact {
-        background: var(--gradient);
-        color: var(--white);
-    }
-
-    .contact .section-title,
-    .contact .section-subtitle {
-        color: var(--white);
-    }
-
-    .contact .section-subtitle {
-        opacity: 0.9;
-    }
-
-    .contact-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 30px;
-        margin-top: 40px;
-    }
-
-    .contact-item {
-        text-align: center;
-        padding: 35px;
-        background: rgba(255,255,255,0.1);
-        border-radius: 15px;
-        backdrop-filter: blur(10px);
-        transition: 0.3s;
-    }
-
-    .contact-item:hover {
-        background: rgba(255,255,255,0.15);
-        transform: translateY(-5px);
-    }
-
-    .contact-icon {
-        font-size: 2.5rem;
-        margin-bottom: 15px;
-    }
-
-    .contact-item h4 {
-        font-size: 1.2rem;
-        margin-bottom: 10px;
-    }
-
-    .contact-item p {
-        opacity: 0.9;
-        font-size: 0.95rem;
-    }
-
-    .contact-item a {
-        color: var(--accent-color);
-        text-decoration: underline;
-    }
-
-    /* ==================== 页脚 ==================== */
-    footer {
-        background: var(--secondary-color);
-        color: var(--white);
-        text-align: center;
-        padding: 40px 0;
-    }
-
-    footer p {
-        opacity: 0.8;
-        font-size: 0.9rem;
-        margin: 8px 0;
-    }
-
-    footer a {
-        color: var(--accent-color);
-    }
-
-    /* ==================== 响应式 ==================== */
-    @media (max-width: 1024px) {
-        .teacher-header {
-            grid-template-columns: 1fr;
-            text-align: center;
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时空智能实验室 | Spatio-Temporal Intelligence Lab</title>
+    <style>
+        /* ==================== 全局样式 ==================== */
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #0f172a;
+            --accent-color: #3b82f6;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --bg-light: #f1f5f9;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #1e40af 0%, #0f172a 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif; line-height: 1.6; color: var(--text-dark); background: var(--bg-light); }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 30px; }
+        .section { padding: 80px 0; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 15px; color: var(--secondary-color); font-weight: 700; }
+        .section-subtitle { text-align: center; color: var(--text-light); margin-bottom: 60px; font-size: 1.1rem; }
+
+        /* ==================== 导航栏 ==================== */
+        header { position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); box-shadow: 0 2px 30px rgba(0,0,0,0.1); z-index: 1000; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); }
+        .logo span { color: var(--secondary-color); }
+        .nav-links { display: flex; gap: 35px; }
+        .nav-links a { color: var(--text-dark); font-weight: 500; position: relative; }
+        .nav-links a:hover { color: var(--primary-color); }
+        .nav-links a::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 0; height: 3px; background: var(--primary-color); transition: 0.3s; }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* ==================== Hero 区域 ==================== */
+        .hero { height: 80vh; background: var(--gradient); display: flex; align-items: center; justify-content: center; text-align: center; color: var(--white); position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/lab-bg.jpg') center/cover; opacity: 0.15; }
+        .hero-content { position: relative; z-index: 1; max-width: 900px; padding: 0 30px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; text-shadow: 2px 2px 8px rgba(0,0,0,0.4); letter-spacing: 3px; }
+        .hero h2 { font-size: 1.5rem; margin-bottom: 25px; font-weight: 400; opacity: 0.95; }
+        .hero p { font-size: 1.2rem; margin-bottom: 35px; opacity: 0.9; line-height: 1.8; }
+        .hero-btn { background: var(--white); color: var(--primary-color); padding: 15px 45px; border-radius: 50px; font-weight: bold; font-size: 1.1rem; display: inline-block; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .hero-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+
+        /* ==================== 教师团队 (修改后) ==================== */
+        .teachers { background: var(--white); }
+        .teacher-wrapper { display: flex; flex-direction: column; gap: 80px; }
+        
+        .teacher-card { 
+            background: var(--bg-light); 
+            border-radius: 25px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 50px rgba(0,0,0,0.1); 
+            transition: 0.4s; 
+        }
+        .teacher-card:hover { box-shadow: 0 20px 70px rgba(0,0,0,0.15); }
+
+        /* 教师头部布局：左侧照片，右侧核心信息 */
+        .teacher-header { 
+            background: var(--gradient); 
+            padding: 50px; 
+            display: grid; 
+            grid-template-columns: 280px 1fr; 
+            gap: 40px; 
+            align-items: start; 
+        }
+
+        .teacher-photo { 
+            width: 100%; 
+            height: 340px; 
+            object-fit: cover; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3); 
+            border: 4px solid rgba(255,255,255,0.2); 
+        }
+
+        .teacher-info-right { color: var(--white); }
+        
+        .teacher-name-row { 
+            display: flex; 
+            align-items: baseline; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+            border-bottom: 2px solid rgba(255,255,255,0.2); 
+            padding-bottom: 20px;
         }
         
-        .teacher-left-col {
-            align-items: center;
-            margin-bottom: 30px;
-        }
+        .teacher-name { font-size: 2.5rem; font-weight: 700; }
+        .teacher-title { font-size: 1.2rem; opacity: 0.9; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; }
+        .teacher-link { margin-left: auto; color: var(--accent-color); font-weight: bold; font-size: 1rem; display: flex; align-items: center; gap: 5px; }
+        .teacher-link:hover { color: var(--white); text-decoration: underline; }
 
-        .teacher-photo {
-            width: 250px;
-            height: 300px;
-        }
-
-        .info-grid {
-            width: 100%;
-            max-width: 500px;
-            text-align: left;
-        }
-
-        .teacher-right-col {
-            text-align: left;
-        }
-
-        .teacher-name {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .direction-card {
-            grid-template-columns: 1fr;
-        }
-        .direction-img {
-            width: 100%;
-            height: 200px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .hero h1 { font-size: 2.5rem; }
-        .hero h2 { font-size: 1.2rem; }
-        .nav-links { display: none; }
-        .teacher-header { padding: 30px; }
-        .teacher-body { padding: 30px; }
-        .section-title { font-size: 2rem; }
-        .direction-content { padding: 20px; }
+        .teacher-bio { font-size: 1.05rem; line-height: 1.8; color: rgba(255,255,255,0.95); text-align: justify; margin-bottom: 30px; }
         
-        .info-item {
+        /* 学生名单样式 */
+        .students-section { margin-top: 25px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; }
+        .students-title { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .students-list { display: flex; flex-wrap: wrap; gap: 10px; }
+        .student-tag { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 15px; font-size: 0.9rem; color: var(--white); transition: 0.3s; }
+        .student-tag:hover { background: var(--accent-color); transform: translateY(-2px); }
+
+        /* 教师论文区域 */
+        .teacher-body { padding: 50px; background: var(--white); }
+        .section-header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 3px solid var(--primary-color); }
+        .section-header h4 { font-size: 1.5rem; color: var(--secondary-color); font-weight: 700; }
+        .section-icon { font-size: 1.8rem; }
+        
+        .paper-list { list-style: none; display: grid; gap: 15px; }
+        .paper-item { padding: 18px 25px; background: var(--bg-light); border-radius: 12px; display: flex; align-items: flex-start; gap: 15px; transition: 0.3s; }
+        .paper-item:hover { background: #f8fafc; transform: translateX(5px); }
+        .paper-icon { font-size: 1.3rem; flex-shrink: 0; }
+        .paper-content { flex: 1; }
+        .paper-title { color: var(--text-dark); font-size: 1rem; font-weight: 500; margin-bottom: 8px; line-height: 1.5; }
+        .paper-title a { color: var(--primary-color); }
+        .paper-title a:hover { text-decoration: underline; }
+        .paper-meta { font-size: 0.85rem; color: var(--text-light); }
+        .paper-year { background: var(--primary-color); color: var(--white); padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; margin-left: 10px; font-weight: 600; }
+
+        /* ==================== 研究方向模块 (新增) ==================== */
+        .research-global { background: #f8fafc; }
+        .research-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        
+        .research-card { 
+            background: var(--white); 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05); 
+            transition: 0.3s; 
+            display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
         }
-        .info-value {
-            text-align: left;
-        }
-    }
+        .research-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        
+        .research-img { width: 100%; height: 200px; object-fit: cover; background: #ddd; }
+        .research-content { padding: 30px; flex: 1; display: flex; flex-direction: column; }
+        .research-number { display: inline-block; background: var(--gradient); color: var(--white); width: 35px; height: 35px; line-height: 35px; text-align: center; border-radius: 50%; font-size: 1rem; font-weight: bold; margin-bottom: 15px; }
+        .research-title { font-size: 1.3rem; color: var(--secondary-color); margin-bottom: 15px; font-weight: 600; }
+        .research-desc { color: var(--text-light); font-size: 0.95rem; line-height: 1.8; text-align: justify; flex: 1; }
+        .research-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0; }
+        .tag { background: #e0e7ff; color: var(--primary-color); padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
 
-    /* ==================== 平滑滚动 ==================== */
-    html {
-        scroll-behavior: smooth;
-    }
-
-    /* ==================== 动画 ==================== */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
+        /* ==================== 合作企业模块 (新增) ==================== */
+        .partners { background: var(--white); }
+        .partners-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 40px; align-items: center; justify-items: center; }
+        .partner-logo { 
+            width: 120px; 
+            height: 120px; 
+            background: #f1f5f9; 
+            border-radius: 15px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            color: #94a3b8; 
+            font-size: 0.9rem;
+            transition: 0.3s;
+            border: 1px solid #e2e8f0;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+        .partner-logo:hover { background: var(--white); box-shadow: 0 10px 30px rgba(0,0,0,0.1); transform: scale(1.05); color: var(--primary-color); }
+        .partner-logo img { max-width: 80%; max-height: 80%; object-fit: contain; }
 
-    .teacher-card {
-        animation: fadeInUp 0.6s ease-out;
-    }
-</style>
-</head> <body>
+        /* ==================== 联系我们 ==================== */
+        .contact { background: var(--gradient); color: var(--white); }
+        .contact .section-title, .contact .section-subtitle { color: var(--white); }
+        .contact .section-subtitle { opacity: 0.9; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
+        .contact-item { text-align: center; padding: 35px; background: rgba(255,255,255,0.1); border-radius: 15px; backdrop-filter: blur(10px); transition: 0.3s; }
+        .contact-item:hover { background: rgba(255,255,255,0.15); transform: translateY(-5px); }
+        .contact-icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .contact-item h4 { font-size: 1.2rem; margin-bottom: 10px; }
+        .contact-item p { opacity: 0.9; font-size: 0.95rem; }
+        .contact-item a { color: var(--accent-color); text-decoration: underline; }
+
+        /* ==================== 页脚 ==================== */
+        footer { background: var(--secondary-color); color: var(--white); text-align: center; padding: 40px 0; }
+        footer p { opacity: 0.8; font-size: 0.9rem; margin: 8px 0; }
+        footer a { color: var(--accent-color); }
+
+        /* ==================== 响应式 ==================== */
+        @media (max-width: 900px) {
+            .teacher-header { grid-template-columns: 1fr; text-align: center; }
+            .teacher-photo { width: 200px; height: 250px; margin: 0 auto; }
+            .teacher-name-row { flex-direction: column; gap: 5px; align-items: center; }
+            .teacher-link { margin-left: 0; margin-top: 10px; }
+            .students-list { justify-content: center; }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .section { padding: 50px 0; }
+        }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body>
+
 <!-- ==================== 导航栏 ==================== -->
 <header>
     <div class="container">
@@ -657,6 +206,8 @@
             <div class="nav-links">
                 <a href="#home">首页</a>
                 <a href="#teachers">教师团队</a>
+                <a href="#research">研究方向</a>
+                <a href="#partners">合作单位</a>
                 <a href="#contact">联系我们</a>
             </div>
         </nav>
@@ -673,697 +224,312 @@
     </div>
 </section>
 
-<!-- ==================== 教师团队 ==================== -->
+<!-- ==================== 教师团队 (简化信息 + 添加学生) ==================== -->
 <section id="teachers" class="section teachers">
     <div class="container">
         <h2 class="section-title">教师团队</h2>
         <p class="section-subtitle">Faculty Members</p>
         
         <div class="teacher-wrapper">
-
+            
             <!-- ============ 老师 1 ============ -->
             <div class="teacher-card">
                 <div class="teacher-header">
-                    <!-- 左侧：照片 + 个人信息 -->
-                    <div class="teacher-left-col">
-                        <img src="images/teacher1/photo.jpg" alt="刘博教授" class="teacher-photo">
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <span class="info-label">性别</span>
-                                <span class="info-value">男</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">职称</span>
-                                <span class="info-value">教授</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">学历</span>
-                                <span class="info-value">博士研究生毕业</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">学位</span>
-                                <span class="info-value">博士学位</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">毕业院校</span>
-                                <span class="info-value">美国 Rutgers University</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">所在单位</span>
-                                <span class="info-value">计算机与信息学院（人工智能学院）</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">电子邮箱</span>
-                                <span class="info-value"><a href="mailto:boliu@hfut.edu.cn">boliu@hfut.edu.cn</a></span>
-                            </div>
+                    <img src="images/teacher1/photo.jpg" alt="刘博教授" class="teacher-photo">
+                    <div class="teacher-info-right">
+                        <div class="teacher-name-row">
+                            <span class="teacher-name">刘博</span>
+                            <span class="teacher-title">教授 / 博导</span>
+                            <a href="#" class="teacher-link">个人主页 &rarr;</a>
                         </div>
-                    </div>
-
-                    <!-- 右侧：姓名 + 个人简介 -->
-                    <div class="teacher-right-col">
-                        <h3 class="teacher-name">刘博 教授</h3>
-                        <div class="header-bio">
-                            <h4>👤 个人简介</h4>
-                            <div class="bio-text">
-                                <p>合肥工业大学计算机与信息学院(人工智能学院)教授、博士生导师，入选国家级青年人才。曾先后在三星电子北美研发中心、沃尔玛全球技术中心、京东硅谷研发中心等机构担任资深机器学习工程师、资深数据科学家等职位。作为人工智能与大数据技术专家，拥有超过十五年在机器学习、大数据、计算机视觉等方向的科研与产业经验。曾经在所任职企业担任核心技术负责人，主导多个广告排序、个性化推荐、智能风控和隐私计算平台的算法研发与落地。 2018年毕业于美国罗格斯大学，获计算机博士学位。已在人工智能领域发表高水平论文80余篇，多次担任CVPR、ICML、NeurIPS等顶级会议程序委员会成员，以及十余个知名学术期刊审稿人。曾获沃尔玛科技创新奖等荣誉，并多次受邀在亚马逊、NEC、摩根士丹利等知名机构进行技术分享。</p>
+                        <div class="teacher-bio">
+                            <p>合肥工业大学计算机与信息学院 (人工智能学院) 教授、博士生导师，入选国家级青年人才。曾先后在三星电子北美研发中心、沃尔玛全球技术中心、京东硅谷研发中心等机构担任资深机器学习工程师。拥有超过十五年在机器学习、大数据、计算机视觉等方向的科研与产业经验。2018 年毕业于美国罗格斯大学，获计算机博士学位。已在人工智能领域发表高水平论文 80 余篇。</p>
+                        </div>
+                        <!-- 新增学生名单 -->
+                        <div class="students-section">
+                            <div class="students-title">指导研究生 / 博士生</div>
+                            <div class="students-list">
+                                <span class="student-tag">张三 (博士)</span>
+                                <span class="student-tag">李四 (硕士)</span>
+                                <span class="student-tag">王五 (硕士)</span>
+                                <span class="student-tag">赵六 (硕士)</span>
+                                <span class="student-tag">钱七 (博士)</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="teacher-body">
-                    <!-- 研究方向 -->
-                    <div class="research-section">
-                        <div class="section-header">
-                            <span class="section-icon">🔬</span>
-                            <h4>研究方向</h4>
-                        </div>
-                        <div class="direction-grid">
-                            <!-- 方向 1 -->
-                            <div class="direction-card">
-                                <img src="images/teacher1/direction1.jpg" alt="研究方向 1" class="direction-img">
-                                <div class="direction-content">
-                                    <span class="direction-number">1</span>
-                                    <h5 class="direction-title">联邦大模型</h5>
-                                    <p class="direction-desc">
-                                        联邦大模型是时空智能实验室的重要研究方向之一，聚焦大规模基础模型与联邦学习的深度融合，致力于构建兼具高性能、强泛化能力与高安全性的分布式智能系统。该方向围绕数据分散与隐私受限环境，探索在不共享原始数据的前提下，实现跨区域、跨机构、跨终端的大模型高效协同训练与持续演化机制。本方向重点研究联邦大模型微调方法、参数高效协同优化机制以及异构数据场景下的鲁棒聚合算法，同时关注隐私保护与系统安全问题，构建安全可靠、可扩展、可落地的联邦大模型技术体系。通过理论创新与应用实践的深度融合，实验室致力于突破数据孤岛与隐私约束带来的关键瓶颈，推动形成“数据可用不可见、模型协同进化”的新型智能计算范式。
-                                </div>
-                            </div>
-                            <!-- 方向 2 -->
-                            <div class="direction-card">
-                                <img src="images/teacher1/direction2.jpg" alt="研究方向 2" class="direction-img">
-                                <div class="direction-content">
-                                    <span class="direction-number">2</span>
-                                    <h5 class="direction-title">多模态时序预测</h5>
-                                    <p class="direction-desc">
-                                        待填写
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- 方向 3 -->
-                            <div class="direction-card">
-                                <img src="images/teacher1/direction3.jpg" alt="研究方向 3" class="direction-img">
-                                <div class="direction-content">
-                                    <span class="direction-number">3</span>
-                                    <h5 class="direction-title">计算机视觉</h5>
-                                    <p class="direction-desc">
-                                        待填写
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="section-header">
+                        <span class="section-icon">📚</span>
+                        <h4>代表论文 (部分)</h4>
                     </div>
-
-                    <!-- 代表论文 -->
-                    <div class="papers-section">
-                        <div class="section-header">
-                            <span class="section-icon">📚</span>
-                            <h4>代表论文</h4>
-                        </div>
-                        <ul class="paper-list">
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Communication-Efficient and Personalized Federated Foundation Model Fine-Tuning via Tri-Matrix Adaptation</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Federated learning-based prediction of depression among adolescents across multiple districts in China</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Rate-My-LoRA: Efficient and Adaptive Federated Model Tuning for Cardiac MRI Segmentation</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Text kernel expansion for real-time scene text detection</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Category-Prompt Refined Feature Learning for Long-Tailed Multi-Label Image Classification</a>
-                                        <span class="paper-year">2024</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">SAM-MIL: A Spatial Contextual Aware Multiple Instance Learning Approach for Whole Slide Image Classification</a>
-                                        <span class="paper-year">2024</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">DICE: Discrete Inversion Enabling Controllable Editing for Multinomial Diffusion and Masked Generative Models</a>
-                                        <span class="paper-year">2024</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Gloss Prior Guided Visual Feature Learning for Continuous Sign Language Recognition</a>
-                                        <span class="paper-year">2024</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Mssd: multi-scale self-distillation for object detection</a>
-                                        <span class="paper-year">2024</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Feature Re-Embedding: Towards Foundation Model-Level Performance in Computational Pathology</a>
-                                        <span class="paper-year">2024</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Generalizable Fourier Augmentation for Unsupervised Video Object Segmentation</a>
-                                        <span class="paper-year">2024</span>
-                                    </p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="paper-list">
+                        <li class="paper-item">
+                            <span class="paper-icon">📄</span>
+                            <div class="paper-content">
+                                <p class="paper-title"><a href="#">Communication-Efficient and Personalized Federated Foundation Model Fine-Tuning via Tri-Matrix Adaptation</a> <span class="paper-year">2025</span></p>
+                            </div>
+                        </li>
+                        <li class="paper-item">
+                            <span class="paper-icon">📄</span>
+                            <div class="paper-content">
+                                <p class="paper-title"><a href="#">Federated learning-based prediction of depression among adolescents across multiple districts in China</a> <span class="paper-year">2025</span></p>
+                            </div>
+                        </li>
+                        <li class="paper-item">
+                            <span class="paper-icon">📄</span>
+                            <div class="paper-content">
+                                <p class="paper-title"><a href="#">Rate-My-LoRA: Efficient and Adaptive Federated Model Tuning for Cardiac MRI Segmentation</a> <span class="paper-year">2025</span></p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
             <!-- ============ 老师 2 ============ -->
             <div class="teacher-card">
                 <div class="teacher-header">
-                    <!-- 左侧：照片 + 个人信息 -->
-                    <div class="teacher-left-col">
-                        <img src="images/teacher2/photo.jpg" alt="武骥副教授" class="teacher-photo">
-                        <div class="info-grid">
-                           <div class="info-item">
-                                <span class="info-label">硕士生导师</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">性别</span>
-                                <span class="info-value">男</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">学位</span>
-                                <span class="info-value">博士学位</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">毕业院校</span>
-                                <span class="info-value">中国科学技术大学</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">学科</span>
-                                <span class="info-value">车辆工程</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">所在单位</span>
-                                <span class="info-value">智能车辆工程系</span>
-                            </div>
+                    <img src="images/teacher2/photo.jpg" alt="武骥副教授" class="teacher-photo">
+                    <div class="teacher-info-right">
+                        <div class="teacher-name-row">
+                            <span class="teacher-name">武骥</span>
+                            <span class="teacher-title">副教授 / 博导</span>
+                            <a href="#" class="teacher-link">个人主页 &rarr;</a>
                         </div>
-                    </div>
-
-                    <!-- 右侧：姓名 + 个人简介 -->
-                    <div class="teacher-right-col">
-                        <h3 class="teacher-name">武骥 副教授</h3>
-                        <div class="header-bio">
-                            <h4>👤 个人简介</h4>
-                            <div class="bio-text">
-                                <p>武骥，博士，副教授，博士生导师，智能车辆工程系副主任。中国仿真学会仿真技术应用专业委员会委员，中国自动化学会系统仿真专业委员会委员，安徽省汽车工程学会理事。</p>
-                                <p>先后承担国家自然科学基金、教育部“春晖计划”、安徽省自然科学基金以及华为、国麒等企业产学研合作课题；以第一/通讯作者身份在Cell旗下Cell Rep. Phys. Sci.、IEEE汇刊IEEE Trans. Power Electron.、IEEE Trans. Ind. Electron.等期刊发表研究论文40余篇（其中：ESI高被引论文4篇），谷歌学术引用4000余次（单篇最高引用量超500次）、h-index 32；公开发明专利30余项（其中：授权15项，成果转化1项）、登记软件著作权8项；参编“十四五”国家规划教材1本；担任e-Prime期刊编辑（2024~），IEEE I&CPS Asia 2023、2024-ECCE Asia、SAE BSR2025等国际会议分会场主席；入选首批安徽省科协青年科技人才托举计划（2020~2023）、World's Top 2% Scientists by Stanford University（2024、2025），获安徽省教学成果一等奖1项（2024）、中国科技产业化促进会科技创新奖一等奖1项（2024）。</p>
+                        <div class="teacher-bio">
+                            <p>博士，副教授，博士生导师，智能车辆工程系副主任。中国仿真学会仿真技术应用专业委员会委员。先后承担国家自然科学基金、教育部“春晖计划”等课题；以第一/通讯作者身份在 Cell 旗下期刊、IEEE 汇刊等发表研究论文 40 余篇，谷歌学术引用 4000 余次。入选首批安徽省科协青年科技人才托举计划，World's Top 2% Scientists by Stanford University。</p>
+                        </div>
+                        <!-- 新增学生名单 -->
+                        <div class="students-section">
+                            <div class="students-title">指导研究生</div>
+                            <div class="students-list">
+                                <span class="student-tag">孙一 (博士)</span>
+                                <span class="student-tag">周二 (硕士)</span>
+                                <span class="student-tag">吴三 (硕士)</span>
+                                <span class="student-tag">郑四 (硕士)</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="teacher-body">
-                    <!-- 研究方向 -->
-                    <div class="research-section">
-                        <div class="section-header">
-                            <span class="section-icon">🔬</span>
-                            <h4>研究方向</h4>
-                        </div>
-                        <div class="direction-grid">
-                            <!-- 方向 1 -->
-                            <div class="direction-card">
-                                <img src="images/teacher2/direction1.jpg" alt="研究方向 1" class="direction-img">
-                                <div class="direction-content">
-                                    <span class="direction-number">1</span>
-                                    <h5 class="direction-title">不完备信息环境下复杂系统建模、仿真与控制</h5>
-                                    <p class="direction-desc">
-                                        X
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- 方向 2 -->
-                            <div class="direction-card">
-                                <img src="images/teacher2/direction2.jpg" alt="研究方向 2" class="direction-img">
-                                <div class="direction-content">
-                                    <span class="direction-number">2</span>
-                                    <h5 class="direction-title">数据与知识协同的电池状态估计与失效预警</h5>
-                                    <p class="direction-desc">
-                                        X
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- 方向 3 -->
-                            <div class="direction-card">
-                                <img src="images/teacher2/direction3.jpg" alt="研究方向 3" class="direction-img">
-                                <div class="direction-content">
-                                    <span class="direction-number">3</span>
-                                    <h5 class="direction-title">光储充换检一体化系统能量调度与优化管理</h5>
-                                    <p class="direction-desc">
-                                        X
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="section-header">
+                        <span class="section-icon">📚</span>
+                        <h4>代表论文 (部分)</h4>
                     </div>
-
-                    <!-- 代表论文 -->
-                    <div class="papers-section">
-                        <div class="section-header">
-                            <span class="section-icon">📚</span>
-                            <h4>代表论文</h4>
-                        </div>
-                        <ul class="paper-list">
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Profit-aware battery swapping station energy scheduling via hybrid hierarchical deep reinforcement learning</a>
-                                        <span class="paper-year">2026</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Residual Value Evaluation for Power Battery Packs Based on Multilevel Feature Fusion</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">融合聚类与分类的退役锂离子电池快速分选</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">EV charging scheduling under limited charging constraints by an improve proximal policy optimization algorithm</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Retired Lithium-Ion Batteries Screening via Feature Tokeniser-Transformer Considering Data Imbalance</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">State of charge estimation with representative cells-based hybrid model for lithium-ion battery pack</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Model-Free Quantitative Diagnosis of Internal Short Circuit for Sodium-Ion Batteries with Charging Capacity Difference Analysis</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Retired Battery Screening Based on Rebooted Auxiliary Classifier Generative Adversarial Network and Improved Gramian Angular Field</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Multi-feature weighted battery pack consistency evaluation based on massive real-world data</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Capacity estimation of retired lithium-ion batteries using random charging segments from massive real-world data</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Retired battery capacity screening based on deep learning with embedded feature smoothing under massive imbalanced data</a>
-                                        <span class="paper-year">2025</span>
-                                    </p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="paper-list">
+                        <li class="paper-item">
+                            <span class="paper-icon">📄</span>
+                            <div class="paper-content">
+                                <p class="paper-title"><a href="#">Profit-aware battery swapping station energy scheduling via hybrid hierarchical deep reinforcement learning</a> <span class="paper-year">2026</span></p>
+                            </div>
+                        </li>
+                        <li class="paper-item">
+                            <span class="paper-icon">📄</span>
+                            <div class="paper-content">
+                                <p class="paper-title"><a href="#">Residual Value Evaluation for Power Battery Packs Based on Multilevel Feature Fusion</a> <span class="paper-year">2025</span></p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
             <!-- ============ 老师 3 ============ -->
             <div class="teacher-card">
                 <div class="teacher-header">
-                    <!-- 左侧：照片 + 个人信息 -->
-                    <div class="teacher-left-col">
-                        <img src="images/teacher3/photo.jpg" alt="韦炎炎" class="teacher-photo">
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <span class="info-label">硕士生导师</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">性别</span>
-                                <span class="info-value">男</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">学历</span>
-                                <span class="info-value">研究生 (博士) 毕业</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">学位</span>
-                                <span class="info-value">博士学位</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">所在单位</span>
-                                <span class="info-value">智能科学与技术系</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">办公地点</span>
-                                <span class="info-value">翡翠湖校区科教楼 B 座 604</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">电子邮箱</span>
-                                <span class="info-value"><a href="mailto:weiyy@hfut.edu.cn">weiyy@hfut.edu.cn</a></span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">联系方式</span>
-                                <span class="info-value">15212790264</span>
-                            </div>
+                    <img src="images/teacher3/photo.jpg" alt="韦炎炎" class="teacher-photo">
+                    <div class="teacher-info-right">
+                        <div class="teacher-name-row">
+                            <span class="teacher-name">韦炎炎</span>
+                            <span class="teacher-title">讲师 / 硕导</span>
+                            <a href="#" class="teacher-link">个人主页 &rarr;</a>
                         </div>
-                    </div>
-
-                    <!-- 右侧：姓名 + 个人简介 -->
-                    <div class="teacher-right-col">
-                        <h3 class="teacher-name">韦炎炎 </h3>
-                        <div class="header-bio">
-                            <h4>👤 个人简介</h4>
-                            <div class="bio-text">
-                                <p>韦炎炎，讲师，博士/博士后，硕导，ACM/CCF/CSIG/CAAI会员。研究方向包括：多模态信息增强与理解、大模型及多智能体应用、AI+X。2018年至2022年期间，在合肥工业大学计算机科学与技术专业硕博连读（导师：汪萌教授、张召教授），2022年12月获得工学博士学位，2023年6月起在合肥工业大学计算机与信息学院智科系任讲师。</p>
-                                <p>目前已发表/接收国内外学术论文30余篇，其中CCF-A类会议及IEEE/ACM Trans.期刊等高水平论文20余篇，谷歌学术总引用1000余次，H-index为12；获CVPR/IJCAI/WWW/ACM MM等国际竞赛奖励7项（其中冠军2项，亚军2项，季军2项），申请中国发明专利10项。主持国自然重点项目子课题1项，安徽省面上项目1项，安徽省重点实验室项目2项，参与国家自然科学基金项目3项，保密项目2项。多次担任IJCV/IEEE TIP/IEEE TMM/IEEE TCSVT/ACM TOMM/CVPR/ICCV/ECCV/ICLR/AAAI/WWW/IJCAI/ACM MM等期刊与国际会议审稿人。</p>
-                                <p>欢迎感兴趣的保研同学（2026年9月入学，目前还有2个名额），发送简历提前进行联系（邮箱：weiyy@hfut.edu.cn，微信：hfut_wei），可提前加入团队交流和学习，入学后表现优秀可推荐硕博连读和实习访学等。</p>
-                                <p>欢迎申报大创项目、参加各类竞赛的同学，通过邮件发送简历或个人基本信息进行联系，可提供研究方向、服务器资源、经费支持等。</p>
-                                <p>2026年招收1-2名学生做AI+Game方向，有兴趣或者相关背景学生可以联系我。</p>
+                        <div class="teacher-bio">
+                            <p>讲师，博士/博士后，硕导，ACM/CCF/CSIG/CAAI 会员。研究方向包括：多模态信息增强与理解、大模型及多智能体应用、AI+X。2022 年 12 月获得工学博士学位。目前已发表/接收国内外学术论文 30 余篇，其中 CCF-A 类会议及 IEEE/ACM Trans.期刊等高水平论文 20 余篇，谷歌学术总引用 1000 余次。获 CVPR/IJCAI 等国际竞赛奖励 7 项。</p>
+                        </div>
+                        <!-- 新增学生名单 -->
+                        <div class="students-section">
+                            <div class="students-title">指导研究生</div>
+                            <div class="students-list">
+                                <span class="student-tag">冯五 (硕士)</span>
+                                <span class="student-tag">陈六 (硕士)</span>
+                                <span class="student-tag">褚七 (硕士)</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="teacher-body">
-                    <!-- 研究方向 -->
-                    <div class="research-section">
-                        <div class="section-header">
-                            <span class="section-icon">🔬</span>
-                            <h4>研究方向</h4>
-                        </div>
-                        <div class="direction-grid">
-                            <!-- 方向 1 -->
-                            <div class="direction-card">
-                                <img src="images/teacher3/direction1.jpg" alt="研究方向 1" class="direction-img">
-                                <div class="direction-content">
-                                    <span class="direction-number">1</span>
-                                    <h5 class="direction-title">鲁棒视觉感知与理解</h5>
-                                    <p class="direction-desc">
-                                        聚焦于复杂环境下的鲁棒视觉感知与语义理解，重点研究复原增强和语义信息理解等问题，提升在光照变化、遮挡和噪声干扰下的稳定性与泛化能力，为自动驾驶、安防监控及医疗影像等领域提供可靠技术支撑。
-                                </div>
-                            </div>
-                            <!-- 方向 2 -->
-                            <div class="direction-card">
-                                <img src="images/teacher3/direction2.jpg" alt="研究方向 2" class="direction-img">
-                                <div class="direction-content">
-                                    <span class="direction-number">2</span>
-                                    <h5 class="direction-title">大模型微调及智能体应用</h5>
-                                    <p class="direction-desc">
-                                        探索大规模预训练模型的高效微调策略，包括参数高效微调（LoRA、Prefix-Tuning 等）与多模态扩展，以实现低成本的迁移与部署。同时结合智能体技术，推动模型在教育、医疗、心理陪护等实际场景中的落地应用。
-                                </div>
-                            </div>
-                            <!-- 方向 3 -->
-                            <div class="direction-card">
-                                <img src="images/teacher3/direction3.jpg" alt="研究方向 3" class="direction-img">
-                                <div class="direction-content">
-                                    <span class="direction-number">3</span>
-                                    <h5 class="direction-title">AI+X（生物、心理、工业制造、娱乐）</h5>
-                                    <p class="direction-desc">
-                                        面向跨学科融合，强调人工智能与生物、心理、工业制造、娱乐等领域的深度结合。通过AI赋能传统学科，推动智能诊断、智慧教育、工业质检和人机交互等创新应用，探索人工智能在社会与产业中的价值创造路径。
-                                </div>
-                            </div>
-                        </div>
+                    <div class="section-header">
+                        <span class="section-icon">📚</span>
+                        <h4>代表论文 (部分)</h4>
                     </div>
-
-                    <!-- 代表论文 -->
-                    <div class="papers-section">
-                        <div class="section-header">
-                            <span class="section-icon">📚</span>
-                            <h4>代表论文</h4>
-                        </div>
-                        <ul class="paper-list">
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Yanyan Wei, Zhao Zhang*, Yang Wang*, Mingliang Xu, Yi Yang, Shuicheng Yan and Meng Wang, “DerainCycleGAN: Rain Attentive CycleGAN for Single Image Deraining and Rainmaking”, IEEE Transactions on Image Processing (IEEE TIP), 30:4788–4801, 2021.（谷歌学术引用：266）</a>
-                                    </p>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#">Yanyan Wei, Zhao Zhang*, Huan Zheng, Richang Hong, Yi Yang and Meng Wang, “SGINet: Toward Sufficient Interaction Between Single Image Deraining and Semantic Segmentation”, in Proceedings of the 30th ACM International Conference on Multimedia (ACM MM), pages 6202–6210, 2022.（谷歌学术引用：38）</a>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#"> Yanyan Wei, Zhao Zhang*, Mingliang Xu, Richang Hong, Jicong Fan and Shuicheng Yan, “Robust Attention Deraining Network for Synchronous Rain Streaks and Raindrops Removal”, in Proceedings of the 30th ACM International Conference on Multimedia (ACM MM), pages 6464–6472, 2022.（谷歌学术引用：22）</a>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#"> Zhao Zhang*, Yanyan Wei, Haijun Zhang, Yi Yang, Shuicheng Yan and Meng Wang, “Data-Driven Single Image Deraining: A Comprehensive Review and New Perspectives”, Pattern Recognition (Pattern Recognition), vol.143, no.6, pp.1-23, June 2023. （谷歌学术引用：81）</a>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#"> Yanyan Wei, Tianyi Mao, Baiang Li, Fei Wang, Feng Li, Zhao Zhang and Yang Zhao*, “Visual Models and Large Multimodal Models Promote Image Restoration and Enhancement: Research Progress”, Journal of Image and Graphics, 2025: 1-23. </a>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#"> Yanyan Wei, Zhao Zhang*, Zhongqiu Zhao, Yang Zhao, Richang Hong, Yi Yang and Meng Wang, “High-Fidelity Stereoscopic Image Rain Removal with Texture Integrity and Disparity Consistency”, in Proceedings of the 2025 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), 2025: 1-5. </a>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#"> Yanyan Wei, Yilin Zhang, Zhao Zhang*, Kun Li, Fei Wang, Shengeng Tang, “Leveraging Vision-language Prompts for Real-world Image Restoration and Enhancement”, Computer Vision and Image Understanding (CVIU), 250: 104222, Oct 2024.</a>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#"> Junhu Wang#, Yanyan Wei#, Zhao Zhang*, Jicong Fan, Yang Zhao*, Yi Yang and Meng Wang, “Progressive Stereo Image Dehazing Network via Cross-view Region Interaction”, IEEE Transactions on Multimedia (IEEE TMM), Feb 2024.</a>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#"> Yanyan Wei, Zhao Zhang*, Yang Wang, Haijun Zhang, Mingbo Zhao, Mingliang Xu* and Meng Wang, “Semi-DerainGAN: A New Semi-supervised Single Image Deraining Network”, in Proceedings of the 2021 IEEE International Conference on Multimedia and Expo (IEEE ICME), pages 1–6, 2021.（谷歌学术引用：57）</a>
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="paper-item">
-                                <span class="paper-icon">📄</span>
-                                <div class="paper-content">
-                                    <p class="paper-title">
-                                        <a href="#"> Yanyan Wei, Zhao Zhang*, Haijun Zhang, Richang Hong and Meng Wang, “A Coarse-to-Fine Multi-stream Hybrid Deraining Network for Single Image Deraining”, in Proceedings of the 2019 IEEE International Conference on Data Mining (IEEE ICDM), pages 628–637, 2019.（谷歌学术引用：46）</a>
-                                    </p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="paper-list">
+                        <li class="paper-item">
+                            <span class="paper-icon">📄</span>
+                            <div class="paper-content">
+                                <p class="paper-title"><a href="#">DerainCycleGAN: Rain Attentive CycleGAN for Single Image Deraining and Rainmaking, IEEE TIP, 2021.</a></p>
+                            </div>
+                        </li>
+                        <li class="paper-item">
+                            <span class="paper-icon">📄</span>
+                            <div class="paper-content">
+                                <p class="paper-title"><a href="#">SGINet: Toward Sufficient Interaction Between Single Image Deraining and Semantic Segmentation, ACM MM, 2022.</a></p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- ============ 老师 4 ============ -->
-            <div class="teacher-card">
+             <!-- ============ 老师 4 ============ -->
+             <div class="teacher-card">
                 <div class="teacher-header">
-                    <!-- 左侧：照片 + 个人信息 -->
-                    <div class="teacher-left-col">
-                        <img src="images/teacher4/photo.jpg" alt="王丽讲师" class="teacher-photo">
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <span class="info-label">讲师</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">性别</span>
-                                <span class="info-value">女</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">学历</span>
-                                <span class="info-value">博士研究生毕业</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">学位</span>
-                                <span class="info-value">博士学位</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">毕业院校</span>
-                                <span class="info-value">中国科学技术大学</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">所在单位</span>
-                                <span class="info-value">汽车与交通工程学院</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">电子邮箱</span>
-                                <span class="info-value"><a href="mailto:wangli@hfut.edu.cn">wangli@hfut.edu.cn</a></span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">联系方式</span>
-                                <span class="info-value">17318530885</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">办公地点</span>
-                                <span class="info-value">能动楼 212 东</span>
-                            </div>
+                    <img src="images/teacher4/photo.jpg" alt="王丽讲师" class="teacher-photo">
+                    <div class="teacher-info-right">
+                        <div class="teacher-name-row">
+                            <span class="teacher-name">王丽</span>
+                            <span class="teacher-title">讲师 / 硕导</span>
+                            <a href="#" class="teacher-link">个人主页 &rarr;</a>
                         </div>
-                    </div>
-
-                    <!-- 右侧：姓名 + 个人简介 -->
-                    <div class="teacher-right-col">
-                        <h3 class="teacher-name">王丽 讲师</h3>
-                        <div class="header-bio">
-                            <h4>👤 个人简介</h4>
-                            <div class="bio-text">
-                                <p>王丽，安徽合肥人，硕士生导师，讲师。中国自动化学会系统仿真专业委员会委员，中国仿真学会仿真技术应用专业委员会委员，电气与电子工程师协会会员（IEEE member）。</p>
-                                <p>2017年本科毕业于中南大学自动化系；2022年获中国科学技术大学自动化系工学博士学位；2022年7月起至今，任合肥工业大学能源动力系讲师。</p>
-                                <p>欢迎对新能源车辆、新型清洁储能系统、智能算法（机器学习、强化学习...）等方向有兴趣的能动专业及车辆工程专业准研究生报考！</p>
-                                <p>欢迎大二、大三的同学提前加入实验室，申请或参与大创项目、学科竞赛！</p>
-                                <p>欢迎对新能源车辆、多能源系统管理策略等方向有兴趣的同学联系本科毕业设计项目！</p>
-                                <p>目前主持国家自然科学青年基金项目、中央高校基础科研校立项目等3个纵向课题，主持合肥市揭榜挂帅项目横向经费40w+。参与国家重点研发计划课题、安徽省高校协同创新项目等项目，荣获2023年中国仿真学会优秀博士学位论文。此外，申请、受理专利15+项（其中授权6项）。</p>
-                                <p> 代表性论著 https://www.researchgate.net/profile/Li-Wang-154/research</p>
+                        <div class="teacher-bio">
+                            <p>安徽合肥人，硕士生导师，讲师。中国自动化学会系统仿真专业委员会委员。2022 年获中国科学技术大学自动化系工学博士学位。目前主持国家自然科学青年基金项目等 3 个纵向课题，主持合肥市揭榜挂帅项目横向经费 40w+。荣获 2023 年中国仿真学会优秀博士学位论文。代表性论著涵盖新能源车辆、新型清洁储能系统、智能算法等方向。</p>
+                        </div>
+                        <!-- 新增学生名单 -->
+                        <div class="students-section">
+                            <div class="students-title">指导研究生</div>
+                            <div class="students-list">
+                                <span class="student-tag">卫八 (硕士)</span>
+                                <span class="student-tag">蒋九 (硕士)</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="teacher-body">
-                    <!-- 研究方向 -->
-                    <div class="research-section">
-                        <div class="section-header">
-                            <span class="section-icon">🔬</span>
-                            <h4>研究方向</h4>
-                        </div>
-                        <div class="direction-grid">
-                            <!-- 方向 1 -->
-                            <div class="direction-card">
-                                <img src="images/teacher4/direction1.jpg" alt="研究方向 1" class="direction-img">
-                                <div class="direction-content">
-                                    <span class="direction-number">1</span>
-                                    <h5 class="direction-title">混合动力系统建模、状态估计、能量管理与容量配置</h5>
-                                    <p class="direction-desc">
-                                        研究对象：新能源汽车、储能系统。发表高水平论文19篇（其中SCI论文16篇，ESI高被引论文2篇），其中在IEEE Transactions on Power Electronics 、IEEE Transactions on Intelligent Transportation Systems等TOP期刊上发表多篇论文，谷歌学术引用2500次。
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="section-header">
+                        <span class="section-icon">📚</span>
+                        <h4>代表论文 (部分)</h4>
                     </div>
-
-                    
+                    <ul class="paper-list">
+                        <li class="paper-item">
+                            <span class="paper-icon">📄</span>
+                            <div class="paper-content">
+                                <p class="paper-title"><a href="#">混合动力系统建模、状态估计、能量管理与容量配置相关论文...</a></p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 研究方向模块 (独立提取) ==================== -->
+<section id="research" class="section research-global">
+    <div class="container">
+        <h2 class="section-title">研究领域</h2>
+        <p class="section-subtitle">Research Areas</p>
+        
+        <div class="research-grid">
+            <!-- 方向 1 -->
+            <div class="research-card">
+                <img src="images/teacher1/direction1.jpg" alt="联邦大模型" class="research-img">
+                <div class="research-content">
+                    <span class="research-number">1</span>
+                    <h5 class="research-title">联邦大模型</h5>
+                    <p class="research-desc">
+                        聚焦大规模基础模型与联邦学习的深度融合，致力于构建兼具高性能、强泛化能力与高安全性的分布式智能系统。探索在不共享原始数据的前提下，实现跨区域、跨机构的大模型高效协同训练。
+                    </p>
+                    <div class="research-tags">
+                        <span class="tag">隐私计算</span>
+                        <span class="tag">分布式训练</span>
+                        <span class="tag">大模型微调</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 方向 2 -->
+            <div class="research-card">
+                <img src="images/teacher1/direction2.jpg" alt="多模态时序预测" class="research-img">
+                <div class="research-content">
+                    <span class="research-number">2</span>
+                    <h5 class="research-title">多模态时序预测</h5>
+                    <p class="research-desc">
+                        结合视觉、文本等多模态数据，对复杂时空序列进行建模与预测。应用于交通流预测、气象变化分析及金融趋势判断等场景，提升预测的准确性与鲁棒性。
+                    </p>
+                    <div class="research-tags">
+                        <span class="tag">时间序列</span>
+                        <span class="tag">多模态融合</span>
+                        <span class="tag">深度学习</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 方向 3 -->
+            <div class="research-card">
+                <img src="images/teacher3/direction1.jpg" alt="鲁棒视觉感知" class="research-img">
+                <div class="research-content">
+                    <span class="research-number">3</span>
+                    <h5 class="research-title">鲁棒视觉感知与理解</h5>
+                    <p class="research-desc">
+                        聚焦于复杂环境下的鲁棒视觉感知，重点研究图像复原增强和语义信息理解。提升在光照变化、恶劣天气（雨雾雪）和噪声干扰下的稳定性，为自动驾驶提供可靠支撑。
+                    </p>
+                    <div class="research-tags">
+                        <span class="tag">图像去雨去雾</span>
+                        <span class="tag">目标检测</span>
+                        <span class="tag">语义分割</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 方向 4 -->
+            <div class="research-card">
+                <img src="images/teacher2/direction2.jpg" alt="电池状态估计" class="research-img">
+                <div class="research-content">
+                    <span class="research-number">4</span>
+                    <h5 class="research-title">数据与知识协同的电池管理</h5>
+                    <p class="research-desc">
+                        针对新能源汽车电池系统，研究数据驱动与机理模型协同的状态估计与失效预警技术。解决电池全生命周期管理中的关键问题，提升能源利用效率与安全性。
+                    </p>
+                    <div class="research-tags">
+                        <span class="tag">BMS</span>
+                        <span class="tag">状态估计</span>
+                        <span class="tag">故障诊断</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 方向 5 -->
+            <div class="research-card">
+                <img src="images/teacher3/direction3.jpg" alt="AI+X" class="research-img">
+                <div class="research-content">
+                    <span class="research-number">5</span>
+                    <h5 class="research-title">AI+X 交叉应用</h5>
+                    <p class="research-desc">
+                        面向跨学科融合，强调人工智能与生物、心理、工业制造、娱乐等领域的深度结合。通过 AI 赋能传统学科，推动智能诊断、智慧教育、工业质检和人机交互等创新应用。
+                    </p>
+                    <div class="research-tags">
+                        <span class="tag">智慧医疗</span>
+                        <span class="tag">工业质检</span>
+                        <span class="tag">人机交互</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 合作企业模块 (新增) ==================== -->
+<section id="partners" class="section partners">
+    <div class="container">
+        <h2 class="section-title">合作单位</h2>
+        <p class="section-subtitle">Our Partners</p>
+        <div class="partners-grid">
+            <!-- 这里使用文字代替图片，实际使用时请替换 img 标签 -->
+            <div class="partner-logo">华为 Huawei</div>
+            <div class="partner-logo">京东 JD.com</div>
+            <div class="partner-logo">三星 Samsung</div>
+            <div class="partner-logo">沃尔玛 Walmart</div>
+            <div class="partner-logo">国麒科技</div>
+            <div class="partner-logo">亚马逊 AWS</div>
         </div>
     </div>
 </section>
@@ -1373,7 +539,6 @@
     <div class="container">
         <h2 class="section-title">联系我们</h2>
         <p class="section-subtitle">Contact Us</p>
-        
         <div class="contact-grid">
             <div class="contact-item">
                 <div class="contact-icon">📍</div>
@@ -1402,12 +567,15 @@
 <!-- ==================== 页脚 ==================== -->
 <footer>
     <div class="container">
-        <p>&copy; 2024 时空智能实验室 | Spatio-Temporal Intelligence Laboratory</p>
+        <p>© 2024 时空智能实验室 | Spatio-Temporal Intelligence Laboratory</p>
         <p>[学校名称] 计算机学院 | 版权所有</p>
         <p>地址：[详细地址] | 邮箱：<a href="mailto:lab@university.edu.cn">lab@university.edu.cn</a></p>
     </div>
 </footer>
-</body> </html>
+
+</body>
+</html>
+
 
 
 
