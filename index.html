@@ -57,7 +57,6 @@
         }
         .teacher-card:hover { box-shadow: 0 20px 70px rgba(0,0,0,0.15); }
 
-        /* 教师头部布局 */
         .teacher-header { 
             background: var(--gradient); 
             padding: 50px; 
@@ -78,11 +77,10 @@
 
         .teacher-info-right { color: var(--white); }
 
-        /* 个人信息表格样式 - 修改部分 */
         .info-table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0 12px; /* 增加行间距 */
+            border-spacing: 0 12px;
             margin-bottom: 25px;
         }
         .info-table td {
@@ -90,26 +88,28 @@
             background: rgba(255,255,255,0.1);
             border-radius: 8px;
             font-size: 0.95rem;
-            vertical-align: top;
+            vertical-align: middle; /* 垂直居中 */
         }
         .info-label {
             color: rgba(255,255,255,0.7);
-            width: 90px; /* 固定标签宽度 */
+            width: 90px;
             font-weight: 500;
-            white-space: nowrap; /* 防止标签换行 */
+            white-space: nowrap;
         }
         .info-value {
             color: var(--white);
             font-weight: 600;
             line-height: 1.5;
         }
-        /* 联系方式链接样式 */
+        /* 修改：联系方式链接样式 */
         .contact-link {
             color: var(--accent-color);
-            text-decoration: underline;
+            text-decoration: none;
             font-weight: 600;
+            margin-left: 15px; /* 增加间距 */
+            border-bottom: 1px dashed var(--accent-color);
         }
-        .contact-link:hover { color: var(--white); }
+        .contact-link:hover { color: var(--white); border-bottom-style: solid; }
 
         .teacher-bio { 
             font-size: 1.05rem; 
@@ -122,60 +122,73 @@
             border-radius: 15px;
         }
         
-        /* 教师论文区域 - 已移除，不再需要 .teacher-body 中的论文列表样式，但保留结构以防万一 */
-        .teacher-body { padding: 50px; background: var(--white); display: none; /* 隐藏原论文区域 */ } 
+        .teacher-body { padding: 50px; background: var(--white); display: none; } 
 
-        /* ==================== 精选论文模块 (新增) ==================== */
+        /* ==================== 精选论文模块 (重构) ==================== */
         .selected-papers-section { background: #f8fafc; }
-        .papers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
-        .paper-group-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
-            border-top: 5px solid var(--primary-color);
-            transition: 0.3s;
-        }
-        .paper-group-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
         
-        .group-header {
+        /* 新的论文列表容器 */
+        .papers-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .paper-item-card {
+            background: var(--white);
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary-color);
+            transition: 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .paper-item-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left-color: var(--accent-color);
+        }
+
+        .paper-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .paper-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .paper-meta {
+            font-size: 0.9rem;
+            color: var(--text-light);
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e2e8f0;
         }
-        .group-teacher-name { font-size: 1.2rem; font-weight: 700; color: var(--secondary-color); }
-        .group-teacher-title { font-size: 0.9rem; color: var(--text-light); background: #e0e7ff; color: var(--primary-color); padding: 2px 8px; border-radius: 4px; }
 
-        .mini-paper-list { list-style: none; }
-        .mini-paper-item {
-            margin-bottom: 15px;
-            padding-left: 20px;
-            position: relative;
-        }
-        .mini-paper-item::before {
-            content: '•';
+        .paper-tag {
+            background: #e0e7ff;
             color: var(--primary-color);
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-        .mini-paper-title {
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            line-height: 1.5;
-            margin-bottom: 4px;
-        }
-        .mini-paper-meta {
+            padding: 2px 8px;
+            border-radius: 4px;
             font-size: 0.8rem;
-            color: var(--text-light);
-            font-style: italic;
+            font-weight: 600;
+        }
+
+        .paper-year {
+            font-weight: bold;
+            color: var(--secondary-color);
         }
 
         /* ==================== 学生团队模块 ==================== */
@@ -215,17 +228,8 @@
             color: var(--secondary-color);
             margin-bottom: 5px;
         }
-        .student-mentor {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            background: #e0e7ff;
-            color: var(--primary-color);
-            padding: 3px 10px;
-            border-radius: 10px;
-            display: inline-block;
-        }
 
-        /* ==================== 研究方向模块 ==================== */
+        /* ==================== 研究方向模块 (图片优化) ==================== */
         .research-global { background: #f8fafc; }
         .research-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
         
@@ -240,17 +244,17 @@
         }
         .research-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
         
-        /* 修改：图片容器固定高度，图片使用 object-fit cover */
+        /* 修改：图片容器保持固定宽高比，防止变形 */
         .research-img-box {
             width: 100%;
             height: 220px; /* 固定高度 */
             overflow: hidden;
+            background: #eee;
         }
         .research-img { 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; /* 关键：保持比例填充 */
-            background: #ddd; 
+            object-fit: cover; /* 关键：裁剪填充，保持比例 */
             transition: 0.5s;
         }
         .research-card:hover .research-img { transform: scale(1.05); }
@@ -260,7 +264,7 @@
         .research-title { font-size: 1.3rem; color: var(--secondary-color); margin-bottom: 15px; font-weight: 600; }
         .research-desc { color: var(--text-light); font-size: 0.95rem; line-height: 1.8; text-align: justify; flex: 1; }
 
-        /* ==================== 合作企业模块 ==================== */
+        /* ==================== 合作企业模块 (图片优化) ==================== */
         .partners { background: var(--white); }
         .partners-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 40px; align-items: center; justify-items: center; }
         
@@ -272,28 +276,31 @@
             border: 1px solid #e2e8f0;
             background: #fff;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .partner-card:hover { 
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
             transform: translateY(-5px);
             border-color: var(--primary-color);
         }
+        /* 修改：Logo 容器固定大小，内部居中 */
         .partner-img-box {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 100px; /* 固定高度，适应横向 Logo */
             margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f8fafc;
-            border-radius: 10px;
+            background: #fff; /* 保持白色背景以防透明图 */
         }
         .partner-img {
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: contain;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* 关键：完整显示，不裁剪 */
         }
-        /* 修改：链接样式 */
+        
         .partner-link {
             font-size: 1.1rem;
             font-weight: 600;
@@ -318,7 +325,8 @@
             .info-table td { text-align: center; display: block; width: 100%; background: transparent; padding: 5px 0; }
             .info-label { width: 100%; color: var(--white); font-weight: 700; margin-bottom: 2px; }
             .info-value { background: rgba(255,255,255,0.1); padding: 8px; border-radius: 8px; display: block; }
-            .papers-grid { grid-template-columns: 1fr; }
+            .paper-item-card { flex-direction: column; align-items: center; text-align: center; }
+            .paper-meta { justify-content: center; }
         }
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
@@ -369,7 +377,6 @@
                 <div class="teacher-header">
                     <img src="images/teacher1/photo.jpg" alt="刘博教授" class="teacher-photo">
                     <div class="teacher-info-right">
-                        <!-- 个人信息表格 - 优化了布局 -->
                         <table class="info-table">
                             <tr>
                                 <td class="info-label">姓名</td>
@@ -379,14 +386,14 @@
                             </tr>
                             <tr>
                                 <td class="info-label">研究方向</td>
-                                <!-- colspan=3 确保占满剩余空间，尽量在一行显示 -->
                                 <td class="info-value" colspan="3">多模态时序预测，联邦大模型，计算机视觉</td>
                             </tr>
                             <tr>
                                 <td class="info-label">联系方式</td>
+                                <!-- 修改：邮箱和主页在同一行 -->
                                 <td class="info-value" colspan="3">
-                                    liubo@hfut.edu.cn <br>
-                                    <a href="http://faculty.hfut.edu.cn/liubo123/zh_CN/more/526701/jsjjgd/index.htm" target="_blank" class="contact-link">个人主页</a>
+                                    liubo@hfut.edu.cn 
+                                    <a href="http://faculty.hfut.edu.cn/liubo123/zh_CN/more/526701/jsjjgd/index.htm" target="_blank" class="contact-link">个人主页 &rarr;</a>
                                 </td>
                             </tr>
                         </table>
@@ -396,7 +403,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- 原论文列表区域已移除 -->
             </div>
 
             <!-- ============ 老师 2 ============ -->
@@ -418,8 +424,8 @@
                             <tr>
                                 <td class="info-label">联系方式</td>
                                 <td class="info-value" colspan="3">
-                                    wuji@hfut.edu.cn <br>
-                                    <a href="https://faculty.hfut.edu.cn/wuji/zh_CN/index.htm" target="_blank" class="contact-link">个人主页</a>
+                                    wuji@hfut.edu.cn 
+                                    <a href="https://faculty.hfut.edu.cn/wuji/zh_CN/index.htm" target="_blank" class="contact-link">个人主页 &rarr;</a>
                                 </td>
                             </tr>
                         </table>
@@ -450,8 +456,8 @@
                             <tr>
                                 <td class="info-label">联系方式</td>
                                 <td class="info-value" colspan="3">
-                                    weiyanyan@hfut.edu.cn <br>
-                                    <a href="https://faculty.hfut.edu.cn/weiyanyan/zh_CN/index.htm" target="_blank" class="contact-link">个人主页</a>
+                                    weiyanyan@hfut.edu.cn 
+                                    <a href="https://faculty.hfut.edu.cn/weiyanyan/zh_CN/index.htm" target="_blank" class="contact-link">个人主页 &rarr;</a>
                                 </td>
                             </tr>
                         </table>
@@ -482,8 +488,8 @@
                             <tr>
                                 <td class="info-label">联系方式</td>
                                 <td class="info-value" colspan="3">
-                                    wangli@hfut.edu.cn <br>
-                                    <a href="https://faculty.hfut.edu.cn/Wangli/zh_CN/index.htm" target="_blank" class="contact-link">个人主页</a>
+                                    wangli@hfut.edu.cn 
+                                    <a href="https://faculty.hfut.edu.cn/Wangli/zh_CN/index.htm" target="_blank" class="contact-link">个人主页 &rarr;</a>
                                 </td>
                             </tr>
                         </table>
@@ -499,100 +505,145 @@
     </div>
 </section>
 
-<!-- ==================== 精选论文模块 (新增) ==================== -->
+<!-- ==================== 精选论文模块 (重构：统一列表 + 时间排序) ==================== -->
 <section id="selected-papers" class="section selected-papers-section">
     <div class="container">
-        <h2 class="section-title">精选代表论文</h2>
+        <h2 class="section-title">代表论文</h2>
         <p class="section-subtitle">Selected Representative Papers</p>
         
-        <div class="papers-grid">
-            <!-- 刘博老师论文 -->
-            <div class="paper-group-card">
-                <div class="group-header">
-                    <span class="group-teacher-name">刘博</span>
-                    <span class="group-teacher-title">教授</span>
+        <div class="papers-list-container">
+            <!-- 2026 -->
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Profit-aware battery swapping station energy scheduling via hybrid hierarchical deep reinforcement learning</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">Transportation Research Part D: Transport and Environment</span>
+                        <span class="paper-year">2026</span>
+                    </div>
                 </div>
-                <ul class="mini-paper-list">
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">Communication-Efficient and Personalized Federated Foundation Model Fine-Tuning via Tri-Matrix Adaptation</div>
-                        <div class="mini-paper-meta">2025</div>
-                    </li>
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">Federated learning-based prediction of depression among adolescents across multiple districts in China</div>
-                        <div class="mini-paper-meta">2025</div>
-                    </li>
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">Rate-My-LoRA: Efficient and Adaptive Federated Model Tuning for Cardiac MRI Segmentation</div>
-                        <div class="mini-paper-meta">2025</div>
-                    </li>
-                </ul>
+            </div>
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Sparse-Scale Transformer with Bidirectional Awareness for Time Series Forecasting</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">AAAI</span>
+                        <span class="paper-year">2026</span>
+                    </div>
+                </div>
+
+            <!-- 2025 -->
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Communication-Efficient and Personalized Federated Foundation Model Fine-Tuning via Tri-Matrix Adaptation</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">TMM</span>
+                        <span class="paper-year">2025</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- 武骥老师论文 -->
-            <div class="paper-group-card">
-                <div class="group-header">
-                    <span class="group-teacher-name">武骥</span>
-                    <span class="group-teacher-title">副教授</span>
-                </div>
-                <ul class="mini-paper-list">
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">Profit-aware battery swapping station energy scheduling via hybrid hierarchical deep reinforcement learning</div>
-                        <div class="mini-paper-meta">2026</div>
-                    </li>
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">Residual Value Evaluation for Power Battery Packs Based on Multilevel Feature Fusion</div>
-                        <div class="mini-paper-meta">2025</div>
-                    </li>
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">融合聚类与分类的退役锂离子电池快速分选</div>
-                        <div class="mini-paper-meta">2025</div>
-                    </li>
-                </ul>
+            
             </div>
 
-            <!-- 韦炎炎老师论文 -->
-            <div class="paper-group-card">
-                <div class="group-header">
-                    <span class="group-teacher-name">韦炎炎</span>
-                    <span class="group-teacher-title">讲师</span>
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Deep sub-ensembles meets quantile regression: uncertainty-aware imputation for time series</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">Machine Learning</span>
+                        <span class="paper-year">2025</span>
+                    </div>
                 </div>
-                <ul class="mini-paper-list">
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">DerainCycleGAN: Rain Attentive CycleGAN for Single Image Deraining and Rainmaking (IEEE TIP)</div>
-                        <div class="mini-paper-meta">2021 · 引用 266+</div>
-                    </li>
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">SGINet: Toward Sufficient Interaction Between Single Image Deraining and Semantic Segmentation (ACM MM)</div>
-                        <div class="mini-paper-meta">2022 · 引用 38+</div>
-                    </li>
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">Robust Attention Deraining Network for Synchronous Rain Streaks and Raindrops Removal (ACM MM)</div>
-                        <div class="mini-paper-meta">2022 · 引用 22+</div>
-                    </li>
-                </ul>
             </div>
 
-            <!-- 王丽老师论文 -->
-            <div class="paper-group-card">
-                <div class="group-header">
-                    <span class="group-teacher-name">王丽</span>
-                    <span class="group-teacher-title">讲师</span>
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Residual Value Evaluation for Power Battery Packs Based on Multilevel Feature Fusion</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">IEEE/ASME Transactions on Mechatronics</span>
+                        <span class="paper-year">2025</span>
+                    </div>
                 </div>
-                <ul class="mini-paper-list">
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">A Comprehensive Review of Battery Modeling and State Estimation Approaches for Advanced BMS</div>
-                        <div class="mini-paper-meta">Review Article</div>
-                    </li>
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">Load-adaptive Real-time EMS for Battery/Ultracapacitor HESS using Dynamic Programming</div>
-                        <div class="mini-paper-meta">Energy Management</div>
-                    </li>
-                    <li class="mini-paper-item">
-                        <div class="mini-paper-title">Sizing Optimization & EMS for HESS using Multi-objective Optimization and Random Forests</div>
-                        <div class="mini-paper-meta">Optimization</div>
-                    </li>
-                </ul>
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">High-Fidelity Stereoscopic Image Rain Removal with Texture Integrity and Disparity Consistency</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">ICASSP</span>
+                        <span class="paper-year">2025</span>
+                    </div>
+                </div>
             </div>
+
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Retired Lithium-Ion Batteries Screening via Feature Tokeniser-Transformer Considering Data Imbalance</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">IEEE Transactions on Industrial Informatics</span>
+                        <span class="paper-year">2025</span>
+                    </div>
+                </div>
+            </div>
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Visual Models and Large Multimodal Models Promote Image Restoration and Enhancement: Research Progress</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">Journal of Image and Graphics</span>
+                        <span class="paper-year">2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2022 -->
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Leveraging Vision-language Prompts for Real-world Image Restoration and Enhancement</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">Computer Vision and Image Understanding (CVIU)</span>
+                        <span class="paper-year">2024</span>
+                    </div>
+                </div>
+            </div>
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Energy Management Strategy and Optimal Sizing for HESS using an Evolutionary Algorithm</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">IEEE Transactions on Intelligent Transportation Systems</span>
+                        <span class="paper-year">2022</span>
+                    </div>
+                </div>
+            </div>
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Sizing Optimization & EMS for HESS using Multi-objective Optimization and Random Forests</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">IEEE Transactions on Power Electronics (TPEL)</span>
+                        <span class="paper-year">2021</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">Adaptive MPC-based Power Distribution Strategy for HESS</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">IEEE Transactions on Power Electronics (TPEL)</span>
+                        <span class="paper-year">2020</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2021 -->
+            <div class="paper-item-card">
+                <div class="paper-content">
+                    <div class="paper-title">DerainCycleGAN: Rain Attentive CycleGAN for Single Image Deraining and Rainmaking</div>
+                    <div class="paper-meta">
+                        <span class="paper-tag">IEEE TIP</span>
+                        <span class="paper-year">2021</span>
+                    </div>
+                </div>
+            </div>
+
+            
+
         </div>
     </div>
 </section>
@@ -738,7 +789,7 @@
     </div>
 </section>
 
-<!-- ==================== 合作企业模块 (图文 + 超链接) ==================== -->
+<!-- ==================== 合作企业模块 ==================== -->
 <section id="partners" class="section partners">
     <div class="container">
         <h2 class="section-title">合作单位</h2>
@@ -749,7 +800,6 @@
                 <div class="partner-img-box">
                     <img src="images/partners/hfiti.png" alt="合肥创新院" class="partner-img">
                 </div>
-                <!-- 添加超链接 -->
                 <a href="#" target="_blank" class="partner-link">合肥创新院</a>
             </div>
             <!-- 企业 2 -->
@@ -822,22 +872,6 @@
                 </div>
                 <a href="#" target="_blank" class="partner-link">英特灵达</a>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- ==================== 页脚 ==================== -->
-<footer>
-    <div class="container">
-        <p>©  时空智能实验室 | Spatio-Temporal Intelligence Laboratory</p>
-        <p>合肥工业大学 </p>
-        <p>地址：[安徽省合肥市蜀山区丹霞路485号] 
-    </div>
-</footer>
-
-</body>
-</html>
-
 
 
 
