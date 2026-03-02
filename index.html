@@ -37,8 +37,78 @@
         .nav-links a:hover::after { width: 100%; }
 
         /* ==================== Hero 区域 ==================== */
-        .hero { height: 80vh; background: var(--gradient); display: flex; align-items: center; justify-content: center; text-align: center; color: var(--white); position: relative; overflow: hidden; }
-        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('images/lab-bg.jpg') center/cover; opacity: 0.15; }
+        .hero { 
+            height: 80vh; 
+            /* 保留渐变底色 */
+            background: var(--gradient); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            color: var(--white); 
+            position: relative; 
+            overflow: hidden; 
+            /* 新增：时空数据背景纹理 (网格 + 波形 + 节点) */
+            background-image: 
+                linear-gradient(rgba(15, 23, 42, 0.85), rgba(30, 64, 175, 0.9)), /* 遮罩层，保证文字清晰 */
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%233b82f6' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E"),
+                /* 模拟波形/时间轴 */
+                linear-gradient(135deg, rgba(59, 130, 246, 0.1) 25%, transparent 25%, transparent 50%, rgba(59, 130, 246, 0.1) 50%, rgba(59, 130, 246, 0.1) 75%, transparent 75%, transparent);
+            background-size: cover, 100px 100px, 40px 40px;
+        }
+        
+        /* 新增：背景装饰元素容器 */
+        .hero-bg-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* 新增：浮动的数据点 (模拟时空节点) */
+        .data-node {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            animation: floatNode 15s infinite linear;
+        }
+
+        .node-1 { width: 8px; height: 8px; top: 20%; left: 10%; animation-duration: 20s; }
+        .node-2 { width: 12px; height: 12px; top: 60%; left: 80%; animation-duration: 25s; animation-delay: -5s; }
+        .node-3 { width: 6px; height: 6px; top: 40%; left: 50%; animation-duration: 18s; animation-delay: -10s; }
+        .node-4 { width: 15px; height: 15px; top: 80%; left: 20%; animation-duration: 30s; animation-delay: -2s; }
+        
+        /* 新增：连接线 (模拟数据流) */
+        .data-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
+            width: 200px;
+            animation: flowLine 8s infinite linear;
+        }
+        
+        .line-1 { top: 30%; left: -200px; transform: rotate(15deg); }
+        .line-2 { top: 70%; left: -200px; transform: rotate(-10deg); animation-delay: 4s; }
+
+        /* 新增：动画关键帧 */
+        @keyframes floatNode {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-100px) translateX(50px); opacity: 0; }
+        }
+
+        @keyframes flowLine {
+            0% { left: -200px; opacity: 0; }
+            50% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
         .hero-content { position: relative; z-index: 1; max-width: 900px; padding: 0 30px; }
         .hero h1 { font-size: 3.5rem; margin-bottom: 20px; text-shadow: 2px 2px 8px rgba(0,0,0,0.4); letter-spacing: 3px; }
         .hero h2 { font-size: 1.5rem; margin-bottom: 25px; font-weight: 400; opacity: 0.95; }
@@ -357,6 +427,15 @@
 
 <!-- ==================== Hero 区域 ==================== -->
 <section id="home" class="hero">
+    <!-- 新增：背景动态装饰元素 -->
+    <div class="hero-bg-decoration">
+        <div class="data-node node-1"></div>
+        <div class="data-node node-2"></div>
+        <div class="data-node node-3"></div>
+        <div class="data-node node-4"></div>
+        <div class="data-line line-1"></div>
+        <div class="data-line line-2"></div>
+    </div>
     <div class="hero-content">
         <h1>合肥工业大学时空数据智能实验室</h1>
         <h2>Hefei University of Technology - Spatio-Temporal Intelligence Laboratory</h2>
@@ -879,6 +958,7 @@
                 </div>
                 <a href="#" target="_blank" class="partner-link">英特灵达</a>
             </div>
+
 
 
 
